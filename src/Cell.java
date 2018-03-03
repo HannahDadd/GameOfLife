@@ -14,7 +14,6 @@ public class Cell {
 		this.neighbours = new ArrayList<Cell>();
 	}
 	
-	
 	/**
 	 * Run an evolutionary iteration on this cell
 	 * Death of cell = return false, else true
@@ -49,5 +48,21 @@ public class Cell {
 		} else {
 			return false;
 		}
+	}
+
+	public int getxPos() {
+		return xPos;
+	}
+
+	public void setxPos(int xPos) {
+		this.xPos = xPos;
+	}
+
+	public int getyPos() {
+		return yPos;
+	}
+
+	public void setyPos(int yPos) {
+		this.yPos = yPos;
 	}
 }
