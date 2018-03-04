@@ -5,10 +5,18 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// Initial seed
+		Main main = new Main();
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		cells.add(new Cell(0,0));
 		cells.add(new Cell(1,0));
 		cells.add(new Cell(2,0));
+		main.iterate(cells, main);
+	}
+	
+	/**
+	 * Iterate between one state and the next in the game of life
+	 */
+	public void iterate(ArrayList<Cell> cells, Main main) {
 		
 		// Loop through each cell and draw the grid
 		int firstXPos = cells.get(0).getxPos();
@@ -33,7 +41,6 @@ public class Main {
 		}
     	
     	// Calc. the neighbours for the cells
-    	Main main = new Main();
     	main.calcNeighbourNumber(firstXPos, lastXPos, firstYPos, lastYPos, cells);
 		
 		// Make grid based of the cell positions with surrounding boarder for new cells
@@ -98,18 +105,16 @@ public class Main {
 	        }
     	}
     	
-    	// Calc. the neighbours for the cells
-    	main.calcNeighbourNumber(firstXPos, lastXPos, firstYPos, lastYPos, cells);
-    	
-    	// Print grid
-		String line = "";
-		for(int i=0; i<grid.length; i++) {
-	        for(int j=0; j<grid[i].length; j++) {
-	            line = line + " " + grid[i][j];
-	        }
-	        line = line + "\n";
-	    }
-		System.out.println(line);
+    	// Print intermediate grid with 2s in positions where cells are being created and 1s where current cells are
+    	// Has not removed dead cells yet
+//		String line = "";
+//		for(int i=0; i<grid.length; i++) {
+//	        for(int j=0; j<grid[i].length; j++) {
+//	            line = line + " " + grid[i][j];
+//	        }
+//	        line = line + "\n";
+//	    }
+//		System.out.println(line);
 	}
 	
 	/**
@@ -121,11 +126,6 @@ public class Main {
 		
 		// Plot all the still alive cells on a grid
     	Object[][] finalGrid = new Object[Math.abs(lastXPos - firstXPos)+3][Math.abs(lastYPos - firstYPos)+3];
-    	for(int i=0; i<finalGrid.length; i++) {
-	        for(int j=0; j<finalGrid[i].length; j++) {
-	        	finalGrid[i][j] = 0;
-	        }
-    	}
     	for(Cell cell:cells) {
     		finalGrid[cell.getxPos()-firstXPos+1][cell.getyPos()-firstYPos+1] = cell;
     	}

@@ -3,8 +3,6 @@ public class Cell {
 	int xPos;
 	int yPos;
 	int numberOfNeighbours;
-	int gridPosX;
-	int gridPosY;
 	
 	public Cell(int xPos, int yPos) {
 		this.xPos = xPos;
@@ -17,7 +15,6 @@ public class Cell {
 	 * Death of cell = return false, else true
 	 */
 	public boolean iterate() {
-		System.out.println(this.numberOfNeighbours);
 		// Cell has fewer than two neighbours it dies
 		if(this.numberOfNeighbours < 2) {
 			return false;
@@ -28,14 +25,6 @@ public class Cell {
 		}
 		return true;
 	}
-	
-	/**
-	 * Set the x, y grid pos of this cell in the current's state grid
-	 */
-	public void setGridPos(int x, int y) {
-		this.gridPosX = x;
-		this.gridPosY = y;
-	}
 
 	public int getxPos() {
 		return xPos;
@@ -43,14 +32,6 @@ public class Cell {
 
 	public int getyPos() {
 		return yPos;
-	}
-
-	public int getGridPosX() {
-		return gridPosX;
-	}
-
-	public int getGridPosY() {
-		return gridPosY;
 	}
 
 	public void setNumberOfNeighbours(int numberOfNeighbours) {
