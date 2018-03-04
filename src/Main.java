@@ -67,7 +67,7 @@ public class Main {
     		grid[cell.getxPos()-firstXPos+1][cell.getyPos()-firstYPos+1] = 1;
     	}
     	
-    	// After making grid, iterate over the old live cells
+    	// After making grid, iterate over the old live cells to remove any which will now be dead
     	ArrayList<Cell> newCells = (ArrayList<Cell>) cells.clone();
     	for(Cell cell : cells) {
     		if(!cell.iterate()) {
@@ -111,7 +111,7 @@ public class Main {
 		        	// Ordinary case
 		        	else {
 		        		totalNeighbours = grid[i+1][j] + grid[i-1][j] + grid[i+1][j-1] + grid[i+1][j+1]
-		        				+ grid[i-1][j-1] + grid[i-1][j+1];
+		        				+ grid[i-1][j-1] + grid[i-1][j+1] + grid[i][j+1] + grid[i][j-1];
 		        	}
 		        	// If there are exactly 2 neighbours create cell
 		        	if(totalNeighbours == 3) {
@@ -152,8 +152,8 @@ public class Main {
 		String line = "";
     	for(int i=0; i<finalGrid.length; i++) {
 	        for(int j=0; j<finalGrid[i].length; j++) {
-	            line = line + " " + finalGrid[i][j];
 	        	if(finalGrid[i][j] instanceof Cell) {
+		            line = line + " X";
 	        		// Count neighbours
 	        		int totalNeighbours = 0;
 		        	// case: corners of grid
@@ -214,8 +214,12 @@ public class Main {
 		        		if(finalGrid[i+1][j+1] instanceof Cell) totalNeighbours++;
 		        		if(finalGrid[i-1][j-1] instanceof Cell) totalNeighbours++;
 		        		if(finalGrid[i-1][j+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[i][j-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[i][j+1] instanceof Cell) totalNeighbours++;
 		        	}
 		        	((Cell) finalGrid[i][j]).setNumberOfNeighbours(totalNeighbours);
+	        	} else {
+		            line = line + " O";
 	        	}
 	        }
 	        line = line + "\n";
