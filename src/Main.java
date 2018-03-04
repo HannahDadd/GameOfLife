@@ -117,45 +117,45 @@ public class Main {
     	cells = newCells;
     	
     	// Loop through each cell in the grid and see if new cell can be created
-    	for(int i=0; i<grid.length; i++) {
-	        for(int j=0; j<grid[i].length; j++) {
+    	for(int x=0; x<grid.length; x++) {
+	        for(int y=0; y<grid[x].length; y++) {
 	        	// Only add new cell if there is not one in the current position
-	        	if(grid[i][j] == 0) {
+	        	if(grid[x][y] == 0) {
 		        	int totalNeighbours = 0;
 		        	// case: corners of grid
-		        	if(i == 0 && j == 0) {
-		        		totalNeighbours = grid[i+1][j] + grid[i][j+1] + grid[i+1][j+1];
-		        	} else if (i == grid.length-1 && j == grid[i].length-1) {
-		        		totalNeighbours = grid[i-1][j] + grid[i][j-1] + grid[i-1][j-1];
-		        	} else if(i == grid.length-1 && j == 0) {
-		        		totalNeighbours = grid[i-1][j] + grid[i][j+1] + grid[i-1][j+1];
-		        	} else if(i == 0 && j == grid[i].length-1) {
-		        		totalNeighbours = grid[i+1][j] + grid[i][j-1] + grid[i+1][j-1];
+		        	if(x == 0 && y == 0) {
+		        		totalNeighbours = grid[x+1][y] + grid[x][y+1] + grid[x+1][y+1];
+		        	} else if (x == grid.length-1 && y == grid[x].length-1) {
+		        		totalNeighbours = grid[x-1][y] + grid[x][y-1] + grid[x-1][y-1];
+		        	} else if(x == grid.length-1 && y == 0) {
+		        		totalNeighbours = grid[x-1][y] + grid[x][y+1] + grid[x-1][y+1];
+		        	} else if(x == 0 && y == grid[x].length-1) {
+		        		totalNeighbours = grid[x+1][y] + grid[x][y-1] + grid[x+1][y-1];
 		        	}
 		        	// case: top of grid
-		        	else if (i == grid.length-1) {
-		        		totalNeighbours = grid[i][j+1] + grid[i][j-1] + grid[i-1][j] + grid[i-1][j+1] + grid[i-1][j-1];
+		        	else if (x == grid.length-1) {
+		        		totalNeighbours = grid[x][y+1] + grid[x][y-1] + grid[x-1][y] + grid[x-1][y+1] + grid[x-1][y-1];
 		        	}
 		        	// Case: Side of grid
-		        	else if (j == grid[i].length-1) {
-		        		totalNeighbours = grid[i+1][j] + grid[i-1][j] + grid[i][j-1] + grid[i+1][j-1] + grid[i-1][j-1];
+		        	else if (y == grid[x].length-1) {
+		        		totalNeighbours = grid[x+1][y] + grid[x-1][y] + grid[x][y-1] + grid[x+1][y-1] + grid[x-1][y-1];
 		        	}
 		        	// case: bottom of grid
-		        	else if(i == 0) {
-		        		totalNeighbours = grid[i][j+1] + grid[i][j-1] + grid[i+1][j] + grid[i+1][j+1] + grid[i+1][j-1];
+		        	else if(x == 0) {
+		        		totalNeighbours = grid[x][y+1] + grid[x][y-1] + grid[x+1][y] + grid[x+1][y+1] + grid[x+1][y-1];
 		        	}
 		        	// case: far side of grid
-		        	else if (j == 0) {
-		        		totalNeighbours = grid[i+1][j] + grid[i-1][j] + grid[i][j+1] + grid[i+1][j+1] + grid[i-1][j+1];
+		        	else if (y == 0) {
+		        		totalNeighbours = grid[x+1][y] + grid[x-1][y] + grid[x][y+1] + grid[x+1][y+1] + grid[x-1][y+1];
 		        	} 
 		        	// Ordinary case
 		        	else {
-		        		totalNeighbours = grid[i+1][j] + grid[i+1][j-1] + grid[i+1][j+1] + grid[i-1][j]
-		        				+ grid[i-1][j-1] + grid[i-1][j+1] + grid[i][j+1] + grid[i][j-1];
+		        		totalNeighbours = grid[x+1][y] + grid[x+1][y-1] + grid[x+1][y+1] + grid[x-1][y]
+		        				+ grid[x-1][y-1] + grid[x-1][y+1] + grid[x][y+1] + grid[x][y-1];
 		        	}
 		        	// If there are exactly 3 neighbours create cell
 		        	if(totalNeighbours == 3) {
-		        		cells.add(new Cell(i+firstXPos-1, j+firstYPos-1));
+		        		cells.add(new Cell(x+firstXPos-1, y+firstYPos-1));
 		        	}
 	        	}
 	        }
@@ -171,82 +171,83 @@ public class Main {
 	public void calcNeighbourNumber(int firstXPos, int lastXPos, int firstYPos, int lastYPos, ArrayList<Cell> cells) {
 		
 		// Plot all the still alive cells on a grid
-		// Invert x and y so they are drawn correctly i.e. co-ordinates put into function follow standards
-    	Object[][] finalGrid = new Object[Math.abs(lastYPos - firstYPos)+3][Math.abs(lastXPos - firstXPos)+3];
+    	Object[][] finalGrid = new Object[Math.abs(lastXPos - firstXPos)+3][Math.abs(lastYPos - firstYPos)+3];
     	for(Cell cell:cells) {
-    		finalGrid[cell.getyPos()-firstYPos+1][cell.getxPos()-firstXPos+1] = cell;
+    		finalGrid[cell.getxPos()-firstXPos+1][cell.getyPos()-firstYPos+1] = cell;
     	}
     	
     	// Calc. neighbour value and draw final grid
+		// Array is looped through in a way that will make x and y match up to standard axis placements i.e.  ^ y > x
+    	// Co-ordinates are also standardised: (x,y)
 		String line = "";
-    	for(int y=0; y<finalGrid.length; y++) {
-	        for(int x=0; x<finalGrid[y].length; x++) {
-	        	if(finalGrid[y][x] instanceof Cell) {
+        for(int y=finalGrid[0].length-1; y>-1; y--) {
+        	for(int x=0; x<finalGrid.length; x++) {
+	        	if(finalGrid[x][y] instanceof Cell) {
 		            line = line + " O";
 	        		// Count neighbours
 	        		int totalNeighbours = 0;
 		        	// case: corners of grid
-		        	if(y == 0 && x == 0) {
-		        		if(finalGrid[y+1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y+1][x+1] instanceof Cell) totalNeighbours++;
-		        	} else if (y == finalGrid.length-1 && x == finalGrid[y].length-1) {
-		        		if(finalGrid[y-1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x-1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x-1] instanceof Cell) totalNeighbours++;
-		        	} else if(y == finalGrid.length-1 && x == 0) {
-		        		if(finalGrid[y-1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x+1] instanceof Cell) totalNeighbours++;
-		        	} else if(y == 0 && x == finalGrid[y].length-1) {
-		        		if(finalGrid[y+1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x-1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y+1][x-1] instanceof Cell) totalNeighbours++;
+		        	if(x == 0 && y == 0) {
+		        		if(finalGrid[x+1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y+1] instanceof Cell) totalNeighbours++;
+		        	} else if (x == finalGrid.length-1 && y == finalGrid[x].length-1) {
+		        		if(finalGrid[x-1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y-1] instanceof Cell) totalNeighbours++;
+		        	} else if(x == finalGrid.length-1 && y == 0) {
+		        		if(finalGrid[x-1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y+1] instanceof Cell) totalNeighbours++;
+		        	} else if(x == 0 && y == finalGrid[x].length-1) {
+		        		if(finalGrid[x+1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y-1] instanceof Cell) totalNeighbours++;
 		        	}
 		        	// case: top of grid
-		        	else if (y == finalGrid.length-1) {
-		        		if(finalGrid[y][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x-1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x-1] instanceof Cell) totalNeighbours++;
+		        	else if (x == finalGrid.length-1) {
+		        		if(finalGrid[x][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y-1] instanceof Cell) totalNeighbours++;
 		        	}
 		        	// Case: Side of grid
-		        	else if (x == finalGrid[y].length-1) {
-		        		if(finalGrid[y+1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x-1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y+1][x-1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x-1] instanceof Cell) totalNeighbours++;
+		        	else if (y == finalGrid[x].length-1) {
+		        		if(finalGrid[x+1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y-1] instanceof Cell) totalNeighbours++;
 		        	}
 		        	// case: bottom of grid
-		        	else if(y == 0) {
-		        		if(finalGrid[y][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x-1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y+1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y+1][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y+1][x-1] instanceof Cell) totalNeighbours++;
+		        	else if(x == 0) {
+		        		if(finalGrid[x][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y-1] instanceof Cell) totalNeighbours++;
 		        	}
 		        	// case: far side of grid
-		        	else if (x == 0) {
-		        		if(finalGrid[y+1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y+1][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x+1] instanceof Cell) totalNeighbours++;
+		        	else if (y == 0) {
+		        		if(finalGrid[x+1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y+1] instanceof Cell) totalNeighbours++;
 		        	} 
 		        	// Ordinary case
 		        	else {
-		        		if(finalGrid[y+1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y+1][x-1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y+1][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x-1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y-1][x+1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x-1] instanceof Cell) totalNeighbours++;
-		        		if(finalGrid[y][x+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x+1][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x-1][y+1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y-1] instanceof Cell) totalNeighbours++;
+		        		if(finalGrid[x][y+1] instanceof Cell) totalNeighbours++;
 		        	}
-		        	((Cell) finalGrid[y][x]).setNumberOfNeighbours(totalNeighbours);
+		        	((Cell) finalGrid[x][y]).setNumberOfNeighbours(totalNeighbours);
 	        	} else {
 		            line = line + " -";
 	        	}
