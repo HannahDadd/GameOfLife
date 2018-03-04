@@ -4,7 +4,7 @@ public class Cell {
 	int yPos;
 	int numberOfNeighbours;
 	
-	public Cell(int yPos, int xPos) {
+	public Cell(int xPos, int yPos) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.numberOfNeighbours = 0;
@@ -26,12 +26,12 @@ public class Cell {
 		return true;
 	}
 
-	public int getxPos() {
-		return xPos;
-	}
-
 	public int getyPos() {
 		return yPos;
+	}
+
+	public int getxPos() {
+		return xPos;
 	}
 
 	public void setNumberOfNeighbours(int numberOfNeighbours) {
