@@ -3,14 +3,23 @@ import java.util.ArrayList;
 public class Main {
 
 	public static void main(String[] args) {
+		Main main = new Main();
 		
 		// Initial seed
-		ArrayList<Cell> cells = new ArrayList<Cell>();
-		cells.add(new Cell(0,0));
-		cells.add(new Cell(1,0));
-		cells.add(new Cell(2,0));
-		Main main = new Main();
-		main.playGame(5, cells, main);
+//		ArrayList<Cell> cells = new ArrayList<Cell>();
+//		cells.add(new Cell(0,0));
+//		cells.add(new Cell(1,0));
+//		cells.add(new Cell(2,0));
+//		main.playGame(5, cells, main);
+		
+		// Glider
+		ArrayList<Cell> gliderCells = new ArrayList<Cell>();
+		gliderCells.add(new Cell(0,0));
+		gliderCells.add(new Cell(1,0));
+		gliderCells.add(new Cell(2,0));
+		gliderCells.add(new Cell(2,-1));
+		gliderCells.add(new Cell(1,-2));
+		main.playGame(5, gliderCells, main);
 	}
 	
 	/**
@@ -110,28 +119,16 @@ public class Main {
 		        	} 
 		        	// Ordinary case
 		        	else {
-		        		totalNeighbours = grid[i+1][j] + grid[i-1][j] + grid[i+1][j-1] + grid[i+1][j+1]
+		        		totalNeighbours = grid[i+1][j] + grid[i+1][j-1] + grid[i+1][j+1] + grid[i-1][j]
 		        				+ grid[i-1][j-1] + grid[i-1][j+1] + grid[i][j+1] + grid[i][j-1];
 		        	}
-		        	// If there are exactly 2 neighbours create cell
+		        	// If there are exactly 3 neighbours create cell
 		        	if(totalNeighbours == 3) {
-		        		grid[i][j] = 2;
-		        		cells.add(new Cell(i+firstXPos-1, j+firstYPos-1));
+		        		cells.add(new Cell(j+firstYPos-1, i+firstXPos-1));
 		        	}
 	        	}
 	        }
     	}
-    	
-    	// Print intermediate grid with 2s in positions where cells are being created and 1s where current cells are
-    	// Has not removed dead cells yet
-//		String line = "";
-//		for(int i=0; i<grid.length; i++) {
-//	        for(int j=0; j<grid[i].length; j++) {
-//	            line = line + " " + grid[i][j];
-//	        }
-//	        line = line + "\n";
-//	    }
-//		System.out.println(line);
     	return cells;
 	}
 	
@@ -153,7 +150,7 @@ public class Main {
     	for(int i=0; i<finalGrid.length; i++) {
 	        for(int j=0; j<finalGrid[i].length; j++) {
 	        	if(finalGrid[i][j] instanceof Cell) {
-		            line = line + " X";
+		            line = line + " O";
 	        		// Count neighbours
 	        		int totalNeighbours = 0;
 		        	// case: corners of grid
@@ -219,7 +216,7 @@ public class Main {
 		        	}
 		        	((Cell) finalGrid[i][j]).setNumberOfNeighbours(totalNeighbours);
 	        	} else {
-		            line = line + " O";
+		            line = line + " -";
 	        	}
 	        }
 	        line = line + "\n";

@@ -4,7 +4,7 @@ public class Cell {
 	int yPos;
 	int numberOfNeighbours;
 	
-	public Cell(int xPos, int yPos) {
+	public Cell(int yPos, int xPos) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.numberOfNeighbours = 0;
