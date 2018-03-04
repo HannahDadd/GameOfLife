@@ -5,24 +5,41 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// Initial seed
-		Main main = new Main();
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		cells.add(new Cell(0,0));
 		cells.add(new Cell(1,0));
 		cells.add(new Cell(2,0));
-		main.iterate(cells, main);
+		Main main = new Main();
+		main.playGame(5, cells, main);
+	}
+	
+	/**
+	 * Pass in cell array and number of iterations and will iterate cell array that many times
+	 */
+	public void playGame(int numberOfTimes, ArrayList<Cell> cells, Main main) {
+		// Run an extra iteration to print inital and final grid
+		for(int i = 0; i<numberOfTimes+1; i++) {
+			cells = main.iterate(cells, main);
+		}
 	}
 	
 	/**
 	 * Iterate between one state and the next in the game of life
 	 */
-	public void iterate(ArrayList<Cell> cells, Main main) {
+	public ArrayList<Cell> iterate(ArrayList<Cell> cells, Main main) {
 		
 		// Loop through each cell and draw the grid
-		int firstXPos = cells.get(0).getxPos();
-		int firstYPos = cells.get(0).getyPos();
-		int lastXPos = cells.get(0).getxPos();
-		int lastYPos = cells.get(0).getyPos();
+		// If there are no cells, make min and max for x and y the same, 0
+		int firstXPos = 0;
+		int firstYPos = 0;
+		int lastXPos = 0;
+		int lastYPos = 0;
+		if(cells.size() != 0) {
+			firstXPos = cells.get(0).getxPos();
+			firstYPos = cells.get(0).getyPos();
+			lastXPos = cells.get(0).getxPos();
+			lastYPos = cells.get(0).getyPos();
+		}
 		
 		// Find the lowest x and y in the grid
 		for(Cell cell:cells) {
@@ -115,6 +132,7 @@ public class Main {
 //	        line = line + "\n";
 //	    }
 //		System.out.println(line);
+    	return cells;
 	}
 	
 	/**
